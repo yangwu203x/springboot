@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!-- h-ui的css -->
+		<link th:href="@{/h-ui/css/H-ui.min.css}" rel="stylesheet" type="text/css" />
+		<link th:href="@{/h-ui.admin/css/style.css}" rel="stylesheet" type="text/css" />
+		<link th:href="@{/h-ui.admin/css/H-ui.admin.css}" rel="stylesheet" type="text/css"/>
+		<link  th:href="@{/h-ui.admin/skin/default/skin.css}" rel="stylesheet" type="text/css" id="skin" />
+		<!-- 图标样式的css -->
+		<link th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" rel="stylesheet" type="text/css" />
+		<!-- 美化表单元素的css -->
+		<link  th:href="@{/icheck/icheck.css}" rel="stylesheet" type="text/css"/>
+		<!-- 自动补全css -->
+		<link th:href="@{/css/jquery-ui.css}" rel="stylesheet" type="text/css"/>
+		<!-- 上传文件的css -->
+		<link th:href="@{/stream/css/stream-v1.css}" rel="stylesheet" type="text/css"/>
+		<!--分页插件样式-->
+		<link  th:href="@{/lib/layui-v2.2.45/layui/css/layui.css}" rel="stylesheet" type="text/css"/>
+		<link th:href="@{/css/reset/reset.css}" rel="stylesheet" type="text/css"/>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>歌曲管理<span class="c-gray en">&gt;</span>歌曲列表<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			<form id="stuForm" th:action="@{/song/listSong}" method="post">
+				<input type="hidden" id="pageNum" name="pageNum"  />
+				<div class="text-c">歌曲名：
+					<input type="text" class="input-text" style="width:250px" id="song_name" name=songName th:value="${song.songName}">
+					<button type="submit" class="btn btn-success radius"><i class="Hui-iconfont">&#xe665;</i> 搜歌曲</button>
+				</div>
+			</form>
+			<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+				<span class="l">
+						<a href="javascript:;" th:style="${session.current_role.getRoleAdd() == 0}?'display:none':''" onclick="song_add()" class="btn btn-primary radius">
+							<i class="Hui-iconfont">&#xe600;</i> 添加歌曲
+						</a>
+						<a href="javascript:;" onclick="backup()" class="btn btn-primary radius">
+							<i class="Hui-iconfont">&#xe604;</i> 备份
+						</a>
+						<a href="javascript:;" th:style="${session.current_role.getRoleUpdate() == 0}?'display:none':''" onclick="restore()" class="btn btn-primary radius">
+							<i class="Hui-iconfont">&#xe68f;</i> 还原
+						</a>
+						<a href="javascript:;" onclick="templateDown()" class="btn btn-primary radius">
+							<i class="Hui-iconfont">&#xe640;</i>下载模板
+						</a>
+						<input type="file"  name="excel_file" id="excel_file" onchange="importFromExcel(this)" style="display: none" />
+ 						<a href="javascript:;" th:style="${session.current_role.getRoleAdd() == 0}?'display:none':''" onclick="document.getElementById('excel_file').click();" class="btn btn-primary radius">
+							<i class="Hui-iconfont">&#xe644;</i> 导入
+						</a>
+						<a href="javascript:;" onclick="expertToExcel()" class="btn btn-primary radius">
+							<i class="Hui-iconfont">&#xe644;</i> 导出
+						</a>
+						<a href="javascript:;" th:style="${session.current_role.getRoleAdd() == 0}?'display:none':''" onclick="uploadSongs()" class="btn btn-primary radius">
+							<i class="Hui-iconfont">&#xe644;</i> 上传歌曲
+						</a>
+				</span>
+				<span class="r">共有数据：<strong th:text="${pagehelper.total}"></strong> 条</span>
+			</div>
+			<div class="mt-20">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<!--<th width="50">歌曲格式</th>-->
+						<th width="60">mrs编号</th>
+						<th width="60">midi编号</th>
+						<th width="60">vod编号</th>
+						<th width="80">歌曲名</th>
+						<th width="80">歌曲语种</th>
+						<!--<th width="100">原版/翻唱</th>-->
+						<!--<th width="100">背景版本</th>-->
+						<!--<th width="100">背景版本画质</th>-->
+						<th width="50">发行年代</th>
+						<th width="80">歌曲主题</th>
+						<th width="100">是否经典老歌</th>
+						<!--<th width="100">音量1</th>-->
+						<!--<th width="100">音量2</th>-->
+						<!--<th width="100">原伴唱声轨</th>-->
+						<th width="100">歌星名</th>
+						<th width="100">所属娱乐节目</th>
+						<th width="100">节目（cn.enter）</th>
+						<th width="100">验收日期</th>
+						<!--<th width="90">点击率</th>-->
+						<!--<th width="90">备注</th>-->
+						<th width="60">上传状态</th>
+						<th width="60">审核状态</th>
+						<th width="80">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="text-c" th:each="song,iterStat:${songList}">
+						<!--<td th:text="${song.fileFormat}" class="songFormat"></td>-->
+						<td th:text="${song.mrsId}"></td>
+						<td th:text="${song.midiId}"></td>
+						<td th:text="${song.vodId}"></td>
+						<td th:text="${song.songName}"></td>
+						<td th:text="${song.langId}" class="songLang"></td>
+						<!--<td th:text="${song.nature}" class="songNature"></td>-->
+						<!--<td th:text="${song.scene}" class="songScene"></td>-->
+						<!--<td th:text="${song.pixel}" class="songPixel"></td>-->
+						<td th:text="${song.songYears}" class="songYears"></td>
+						<td th:text="${song.themeSong}" class="songTheme"></td>
+						<td th:text="${song.classicSong == '1'} ? '是' : '不是'"></td>
+						<!--<td th:text="${song.volumeOne}"></td>-->
+						<!--<td th:text="${song.volumeTwo}"></td>-->
+						<!--<td th:text="${song.strack}"></td>-->
+						<td th:text="${song.singerName}"></td>
+						<td th:text="${song.tvProgram}" class="tvProgram"></td>
+						<td th:text="${song.tvProgramEnter}" class="tvProgramEnter"></td>
+						<td th:text="${song.updateDate}"></td>
+						<!--<td th:text="${song.orderTime}"></td>-->
+						<!--<td th:text="${song.songInfo}"></td>-->
+						<td th:text="${song.headerPath}? '已上传':'未上传'"></td>
+						<td th:text="${song.status == '1'} ? '已审核':'未审核'"></td>
+						<td class="td-manage">
+							<a title="编辑" href="javascript:;" th:style="${session.current_role.getRoleUpdate() == 0}?'display:none':''" th:onclick="'javascript:song_edit('+${song.id}+')'" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont" style="font-size:20px;">&#xe6df;</i></a>
+							<a title="删除" href="javascript:;" th:style="${session.current_role.getRoleDel() == 0}?'display:none':''" th:onclick="'javascript:singleDel(this,'+${song.id}+')'" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont" style="font-size:20px;">&#xe6e2;</i></a>
+							<a title="审核" href="javascript:;" th:style="${session.current_role.getRoleCheck() == 0}?'display:none':''"  th:class="${song.status == 1}?'ml-5 hidden':'ml-5'" th:onclick="'javascript:passCheck('+${song.id}+')'"  style="text-decoration:none"><i class="Hui-iconfont" style="font-size:20px;">&#xe6e1;</i></a>
+
+						</td>
+					</tr>
+				</tbody>
+			</table>
+				<div id="layPage" style="float:right"></div>
+			</div>
+		</div>
+	</body>
+	<!-- h-ui的js -->
+	<script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/h-ui/js/H-ui.js}"></script>
+	<script type="text/javascript" th:src="@{/h-ui.admin/js/H-ui.admin.js}"></script>
+	<!-- 弹出层js -->
+	<script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}"></script>
+	<script type="text/javascript" th:src="@{/lib/laypage/1.2/laypage.js}"></script>
+	<script type="text/javascript" th:src="@{/lib/My97DatePicker/4.8/WdatePicker.js}"></script>
+	<script type="text/javascript" th:src="@{/lib/datatables/1.10.0/jquery.dataTables.min.js}"></script>
+	<!-- 自动补全js -->
+	<script type="text/javascript" th:src="@{/js/jquery-ui.min.js}"></script>
+	<!-- 上传文件的js -->
+	<script type="text/javascript" th:src="@{/stream/js/stream-v1.js}"></script>
+	<!--分页插件jquery pagination-->
+	<script type="text/javascript" th:src="@{/lib/layui-v2.2.45/layui/layui.js}"></script>
+	<!--自定义js-->
+	<script type="text/javascript" th:src="@{/platform/js/song/song_list.js}"></script>
+	<script type="text/javascript">
+        layui.use('laypage',function(){
+            var laypage = layui.laypage;
+            //分页
+            laypage.render({
+                elem: 'layPage' //分页容器的id
+                ,count: [[${pagehelper.pages}]] //总页数
+                ,curr:[[${pagehelper.pageNum}]]//当前页
+                ,skin: '#FF5722' //自定义选中色值
+                ,skip: true //开启跳页
+                ,jump: function(obj, first){
+                    if(!first){
+                        layer.msg('第'+ obj.curr +'页');
+                        if([[${pagehelper.pageNum}]] != obj.curr){
+                            $("#pageNum").val(obj.curr);
+                            $("#stuForm").submit();
+                        }
+                    }
+                }
+            });
+        });
+	</script>
+</html>

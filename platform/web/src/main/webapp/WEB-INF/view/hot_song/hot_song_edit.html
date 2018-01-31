@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!-- h-ui的css -->
+		<link th:href="@{/h-ui/css/H-ui.min.css}" rel="stylesheet" type="text/css" />
+		<link th:href="@{/h-ui.admin/css/style.css}" rel="stylesheet" type="text/css" />
+		<link th:href="@{/h-ui.admin/css/H-ui.admin.css}" rel="stylesheet" type="text/css"/>
+		<link  th:href="@{/h-ui.admin/skin/default/skin.css}" rel="stylesheet" type="text/css" id="skin" />
+		<!-- 图标样式的css -->
+		<link th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" rel="stylesheet" type="text/css" />
+		<!-- 美化表单元素的css -->
+		<link  th:href="@{/icheck/icheck.css}" rel="stylesheet" type="text/css"/>
+	</head>
+	<body>
+		<article class="page-container">
+			<form th:action="@{${requestUrl}}" method="post" enctype="multipart/from-data" class="form form-horizontal" id="edit_form" >
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>热门歌曲名称:</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text"  th:value="${hotSong.song}?${hotSong.song.songName}:''"
+							id="song_name" name="name" required="true">
+					</div>
+				</div>
+
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>对应歌曲编号：</label>
+					<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+						<select class="select" size="1" name="songId" id="song_id" required="true">
+							<option value="" selected th:text="${hotSong.song}? ${hotSong.song.id}:'请选择'" th:value="${hotSong.song}?${hotSong.song.id}:''">请选择</option>
+						</select>
+						</span> </div>
+				</div>
+				
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>热门歌曲排序：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="number" class="input-text" style="width:100%;" th:value="${hotSong.rank}"
+							id="song_priority" name="rank" required="true">
+					</div>
+				</div>
+				
+				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+						<input type="hidden" id="hot_id" th:value="${hotSong.id}" name="id">
+						<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+					</div>
+				</div>
+			</form>
+		</article>
+	</body>
+	<!-- h-ui的js -->
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/h-ui/js/H-ui.js}"></script>
+	<script type="text/javascript" th:src="@{/h-ui.admin/js/H-ui.admin.js}"></script>
+	<!-- 弹出层js -->
+	<script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}"></script>
+	<!-- 美化表单元素的js -->
+	<script type="text/javascript" th:src="@{/icheck/jquery.icheck.min.js}"></script>
+	<!-- 表单验证的js -->
+	<script type="text/javascript" th:src="@{/jquery.validation/1.14.0/jquery.validate.min.js}"></script> 
+	<script type="text/javascript" th:src="@{/jquery.validation/1.14.0/validate-methods.js}"></script> 
+	<script type="text/javascript" th:src="@{/jquery.validation/1.14.0/messages_zh.min.js}"></script>
+	<!--jquery.form.js-->
+	<script type="text/javascript" th:src="@{/form/jquery.form.js}"></script>
+	<!--自定义js-->
+	<script type="text/javascript" th:src="@{/platform/js/hot_song/hot_song_edit.js}"></script>
+</html>

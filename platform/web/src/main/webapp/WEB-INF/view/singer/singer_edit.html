@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!-- h-ui的css -->
+		<link th:href="@{/h-ui/css/H-ui.min.css}" rel="stylesheet" type="text/css" />
+		<link th:href="@{/h-ui.admin/css/style.css}" rel="stylesheet" type="text/css" />
+		<link th:href="@{/h-ui.admin/css/H-ui.admin.css}" rel="stylesheet" type="text/css"/>
+		<link  th:href="@{/h-ui.admin/skin/default/skin.css}" rel="stylesheet" type="text/css" id="skin" />
+		<!-- 图标样式的css -->
+		<link th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" rel="stylesheet" type="text/css" />
+		<!-- 美化表单元素的css -->
+		<link  th:href="@{/icheck/icheck.css}" rel="stylesheet" type="text/css"/>
+	</head>
+	<body>
+		<article class="page-container">
+			<form th:action="@{${requestUrl}}" method="post" enctype="multipart/from-data" class="form form-horizontal" id="edit_form">
+				<input type="hidden" th:value="${singer.id}" name="id"/>
+				<!--<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>歌星编号：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+							<input type="text" class="input-text"  th:value="${singer.singerNo}" id="singerNo" name="singerNo" required="true">
+					</div>
+				</div>-->
+				
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>歌星名称：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text"  th:value="${singer.singerName}" id="singerName" name="singerName" required="true">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>歌星拼音：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" th:value="${singer.singerPinyin}" id="singer_pinyin" name="singerPinyin" required="true">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>歌星类型：</label>
+					<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+						<select class="select" size="1" name="singerType" id="singer_type">
+							<option value="-1">请选择</option>
+							<option th:each="type:${singerType}" th:text="*{type.name}" th:value="*{type.id}" th:selected="${type.id == singer.singerType} ? 'selected' : 'false'"></option>
+						</select>
+						</span> </div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>版本：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text Wdate" name="singerVersion" id="singer_version" th:value="${#dates.format(singer.singerVersion, 'yyyy-MM-dd')}" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" required="true">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3">歌星头像：</label>
+					<div class="formControls col-xs-8 col-sm-9"> <span class="btn-upload form-group">
+						<input class="input-text upload-url" type="text"  readonly nullmsg="请添加歌星头像！" style="width:200px">
+						<a href="javascript:void();" class="btn btn-primary radius upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+						<input type="file"  class="input-file" name="headerFile" id="headerFile" th:attr="required=${singer.headerPath}?'false':'true'" th:value="${singer.headerPath}">
+						</span> </div>
+				</div>
+				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+						<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+					</div>
+				</div>
+			</form>
+		</article>
+	</body>
+	<!-- h-ui的js -->
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/h-ui/js/H-ui.js}"></script>
+	<script type="text/javascript" th:src="@{/h-ui.admin/js/H-ui.admin.js}"></script>
+	<!-- 弹出层js -->
+	<script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}"></script>
+	<!-- 美化表单元素的js -->
+	<script type="text/javascript" th:src="@{/icheck/jquery.icheck.min.js}"></script>
+	<!-- 表单验证的js -->
+	<script type="text/javascript" th:src="@{/jquery.validation/1.14.0/jquery.validate.min.js}"></script>
+	<script type="text/javascript" th:src="@{/jquery.validation/1.14.0/validate-methods.js}"></script>
+	<script type="text/javascript" th:src="@{/jquery.validation/1.14.0/messages_zh.min.js}"></script>
+	<script type="text/javascript" th:src="@{/lib/My97DatePicker/4.8/WdatePicker.js}"></script>
+	
+	<script type="text/javascript" th:src="@{/platform/js/singer/singer_edit.js}">
+	
+
+	</script>  
+</html>

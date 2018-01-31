@@ -1,0 +1,147 @@
+﻿<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"/>
+<meta name="renderer" content="webkit|ie-comp|ie-stand"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" th:src="@{/lib/html5shiv.js}"></script>
+<script type="text/javascript" src="@{lib/respond.min.js}"></script>
+<![endif]-->
+<!--<link th:href="@{/h-ui/css/H-ui.min.css}" rel="stylesheet" type="text/css" />-->
+<link th:href="@{/static/h-ui.admin/css/H-ui.login.css}" rel="stylesheet" type="text/css" />
+<link th:href="@{/static/h-ui.admin/css/style.css}" rel="stylesheet" type="text/css" />
+<link th:href="@{/static/lib/Hui-iconfont/1.0.8/iconfont.css}" rel="stylesheet" type="text/css" />
+
+<!--[if IE 6]>
+<script type="text/javascript" th:src="@{/static/lib/DD_belatedPNG_0.0.8a-min.js}" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>音特电子后台管理系统</title>
+<meta name="keywords" content=""/>
+<meta name="description" content=""/>
+</head>
+<body>
+<input type="hidden" id="TenantId" name="TenantId" value="" />
+<div class="header"></div>
+<div class="loginWraper">
+    <!--<div class="logo"  style=""></div>-->
+  <div id="loginform" class="loginBox" >
+    <form class="form form-horizontal"  th:action="@{/login}" id="edit_form" method="post">
+      <div class="row cl" style="margin-top:19px;text-align:center;">
+        <!--<img src="/h-ui.admin/images/logo.png"/>-->
+        <div class="logo">
+          <!--<label for="online" style="font-size:24px;color:#0000000;font-family:MicrosoftYaHei;">-->
+            <!--登录</label>-->
+        </div>
+      </div>
+      <div class="row cl" >
+        <!--<label class="form-label col-xs-3"><i class="Hui-iconfont" style="font-weight:bold;">&#xe62d;</i></label>-->
+        <div class="formControls col-xs-8" >
+          <input id="username" name="username" type="text" placeholder="账户" class="input-text cn.enter" width="200px"  value = "admin" required="required" />
+        </div>
+      </div>
+      <div class="row cl">
+        <!--<label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe63f;</i></label>-->
+        <div class="formControls col-xs-8" >
+          <input id="password" name="password" type="password" placeholder="密码" value="123456"  class="input-text cn.enter" required="required" />
+        </div>
+      </div>
+      <div class="row cl">
+        <div class="formControls col-xs-8 col-xs-offset-3">
+          <input class="input-text-code cn.enter"  type="text" placeholder="输入验证码"  id="authCode" name="authCode"  required="required" />
+
+          <a height="42" style="margin-left: 14px;" href="javascript:void(0)" onclick="changeValidate();"><img style="margin-top: -10px;" align="middle" alt="验证码" id="validateCode" th:src="@{/captcha}" title="换一张"></a>
+          <!--<a href="javascript:void(0)" onclick="changeValidate();" >看不清，换一张</a> --></div>
+      </div>
+
+      <div class="row cl">
+        <div class="formControls col-xs-8 col-xs-offset-3">
+          <input name="" type="submit" class="btn-success"  value="&nbsp;登&nbsp;录&nbsp;" style="font-size:16px;"/>
+          <!--<input name="" type="reset"  class="btn btn-default radius size-L" style="margin-left:30px;" value="&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;"/>-->
+        </div>
+      </div>
+      <div class="row cl" style="margin-top:22px;">
+        <div class="formControls col-xs-8 col-xs-offset-3">
+          <label for="online" >
+            <input type="checkbox" name="online" id="online" value=""/>
+            使我保持登录状态</label>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="footer"><!--音特电子后台管理系统--></div>
+<script type="text/javascript" th:src="@{/static/lib/jquery/1.9.1/jquery.min.js}"></script>
+<!-- 弹出层js -->
+<script type="text/javascript" th:src="@{/static/lib/layer/2.4/layer.js}"></script>
+<script type="text/javascript" th:src="@{/static/h-ui/js/H-ui.min.js}"></script>
+<!-- 表单验证的js -->
+<script type="text/javascript" th:src="@{/static/jquery.validation/1.14.0/jquery.validate.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/jquery.validation/1.14.0/validate-methods.js}"></script>
+<script type="text/javascript" th:src="@{/static/jquery.validation/1.14.0/messages_zh.min.js}"></script>
+<!--jquery.form.js-->
+<script type="text/javascript" th:src="@{/static/form/jquery.form.js}"></script>
+<script type="text/javascript">
+    $.validator.setDefaults({
+        submitHandler: function() {
+            $("#edit_form").ajaxSubmit(function (result) {
+                var obj = JSON.parse(result);
+                var code = obj.code;
+                var msg = obj.msg;
+                if (code == 1) {
+                    window.location.href = "/index";
+                } else {
+                    layer.msg(msg);
+                    $("#validateCode").attr("src", "/captcha?abc=" + Math.random());
+                }
+            });
+        }
+    });
+    $().ready(function() {
+        $("#edit_form").validate({
+            errorElement:'div',
+            errorPlacement: function(error, element) {
+                error.addClass('tooltip tooltip-inner arrow-left');
+                if (element.is(":radio")){
+                    error.appendTo(element.parent().next().next());
+                }else if (element.is(":checkbox")){
+                    error.appendTo(element.next());
+                }else{
+                    element.after(error);
+                }
+                var pos = $.extend({}, element.offset(), {
+                        width: element.outerWidth()
+                        , height: element.outerHeight()
+                    }),
+                    actualWidth = error.outerWidth(),
+                    actualHeight = error.outerHeight();
+                if((pos.top - actualHeight)<0){actualHeight=0;pos.width+=10;}//如果输入框距离顶端为0情况把提示放右边
+                if(element.parents(".blockPage").attr("class")=="blockUI blockMsg blockPage"){//如果是弹出框的，那么设置如下
+                    error.css({display:'block',opacity:'0.6' ,left:300,top:pos.top - $(document).scrollTop() - actualHeight - 100, "border-left": '0px'});
+                }
+                else if (element.is(":radio")){//类型为radio的显示如下
+                    error.css({display:'block',opacity:'0.6',top: pos.top - actualHeight, left: pos.left + pos.width / 2 });
+                }else{//其他均为以下显示
+                    error.css({display:'block',opacity:'0.6',top: pos.top - actualHeight, left: pos.left + pos.width-10 });
+                }
+            },
+            highlight: function(element, errorClass) {
+                //高亮显示
+                $(element).addClass(errorClass);
+                $(element).parents('li:first').children('label').addClass(errorClass);
+            },
+            unhighlight:function(element, errorClass){
+                $(element).removeClass(errorClass);
+                $(element).parents('li:first').children('label').removeClass(errorClass);
+            }
+        });
+    });
+    function changeValidate(){
+        $("#validateCode").attr("src", "/captcha?abc=" + Math.random());
+    }
+</script>
+</body>
+</html>

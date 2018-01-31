@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th = "http://www.thymeleaf.org">
+	<head>
+		<meta name = "renderer" content = "webkit|ie-comp|ie-stand">
+		<meta http-equiv = "X-UA-Compatible" content = "IE = edge,chrome = 1">
+		<meta name = "viewport" content = "width = device-width,initial-scale = 1,minimum-scale = 1.0,maximum-scale = 1.0,user-scalable = no" />
+		<meta http-equiv = "Cache-Control" content = "no-siteapp" />
+		<!-- h-ui的css -->
+		<link th:href = "@{/h-ui/css/H-ui.min.css}" rel = "stylesheet" type = "text/css" />
+		<link th:href = "@{/h-ui.admin/css/style.css}" rel = "stylesheet" type = "text/css" />
+		<link th:href = "@{/h-ui.admin/css/H-ui.admin.css}" rel = "stylesheet" type = "text/css"/>
+		<link  th:href = "@{/h-ui.admin/skin/default/skin.css}" rel = "stylesheet" type = "text/css" id = "skin" />
+		<!-- 图标样式的css -->
+		<link th:href = "@{/lib/Hui-iconfont/1.0.8/iconfont.css}" rel = "stylesheet" type = "text/css" />
+		<style type = "text/css">
+			#menu_icon>i{
+				display:inline-block;
+				line-height: 50px;
+				width:50px;
+			}
+			#menu_icon>i:hover{
+				cursor: pointer;
+				
+			}
+			.icon.active{
+				background-color:#f43838;
+			}
+		</style>
+	</head>
+	<body>
+		<article class = "page-container">
+			<form th:action = "@{${requestUrl}}" method = "post" class = "form form-horizontal" id = "menu_add_form" onsubmit = "return menuForm()">
+				<div class = "row cl">
+					<label class = "form-label col-xs-4 col-sm-3">菜单类型：</label>
+					<div class = "formControls col-xs-8 col-sm-9"> <span class = "select-box">
+						<select class = "select" size = "1" name = "menuType" id = "menu-type">
+							<option th:selected="${menu.parentMenuId != 0}" value = "2">子菜单</option>
+							<option th:selected="${menu.parentMenuId == 0}" value = "1">顶级菜单</option>
+						</select>
+						<input type="hidden" id="parentMenuId" th:value="${menu.parentMenuId}" />
+						</span> </div>
+				</div>
+
+				<div class = "row cl" id = "parent-menu" >
+					<label class = "form-label col-xs-4 col-sm-3">顶级菜单：</label>
+					<div class = "formControls col-xs-8 col-sm-9"> <span class = "select-box">
+						<select class = "select" size = "1" name = "parentMenuId" id = "menu-select">
+							<!-- 通过异步加载子菜单 -->
+						</select>
+						</span> </div>
+				</div>
+
+				<div class = "row cl">
+					<label class = "form-label col-xs-4 col-sm-3"><span class = "c-red">*</span>菜单名：</label>
+					<div class = "formControls col-xs-8 col-sm-9">
+						<input type = "text" class = "input-text" th:value = "${menu.name}" id = "name" name = "name">
+					</div>
+				</div>
+				<div class = "row cl">
+					<label class = "form-label col-xs-4 col-sm-3"><span class = "c-red"></span>菜单路径：</label>
+					<div class = "formControls col-xs-8 col-sm-9">
+						<input type = "text" class = "input-text"  th:value = "${menu.url}" th:readonly="${menu.url}" placeholder = "#" id = "url" name = "url">
+					</div>
+				</div>
+				
+				<!-- 定制菜单图标 -->
+				<div class = "row cl" id = "row_menu_icon">
+					<label class = "form-label col-xs-4 col-sm-3"><span class = "c-red">*</span>菜单图标：</label>
+					<input type = "hidden" name = "menuIcon" id = "menuIcon"/>
+					<div class = "formControls col-xs-8 col-sm-9" id = "show_menu_icon">
+						<a class = "btn btn-default round" href = "javascript:;" onclick = "select_menu_icon()">单击选择菜单图标</a>
+						<i th:class = "${menu.menuIcon}" style = "font-size:30px;" ></i>
+					</div>
+				</div>
+				<input id = "id" name = "id" th:value = "${menu.id}" type = "hidden"/>
+				<div class = "row cl">
+					<div class = "col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+						<input class = "btn btn-primary radius" type = "submit" value = "&nbsp;&nbsp;提交&nbsp;&nbsp;">
+					</div>
+				</div>
+			</form>
+		</article>
+	</body>
+	<!-- h-ui的js -->
+	<script type = "text/javascript" th:src = "@{/lib/jquery/1.9.1/jquery.min.js}"></script>
+	<script type = "text/javascript" th:src = "@{/h-ui/js/H-ui.js}"></script>
+	<script type = "text/javascript" th:src = "@{/h-ui.admin/js/H-ui.admin.js}"></script>
+	<!-- 弹出层js -->
+	<script type = "text/javascript" th:src = "@{/lib/layer/2.4/layer.js}"></script>
+	<!-- 表单验证的js -->
+	<script type = "text/javascript" th:src = "@{/jquery.validation/1.14.0/jquery.validate.min.js}"></script>
+	<script type = "text/javascript" th:src = "@{/jquery.validation/1.14.0/validate-methods.js}"></script>
+	<script type = "text/javascript" th:src = "@{/jquery.validation/1.14.0/messages_zh.min.js}"></script>
+	<!--自定义js-->
+	<script type = "text/javascript" th:src="@{/platform/js/menu/menu_edit.js}"></script>
+</html>

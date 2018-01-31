@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!-- h-ui的css -->
+		<link th:href="@{/h-ui/css/H-ui.min.css}" rel="stylesheet" type="text/css" />
+		<link th:href="@{/h-ui.admin/css/style.css}" rel="stylesheet" type="text/css" />
+		<link th:href="@{/h-ui.admin/css/H-ui.admin.css}" rel="stylesheet" type="text/css"/>
+		<link  th:href="@{/h-ui.admin/skin/default/skin.css}" rel="stylesheet" type="text/css" id="skin" />
+		<!-- 图标样式的css -->
+		<link th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" rel="stylesheet" type="text/css" />
+		<!-- 美化表单元素的css -->
+		<link  th:href="@{/icheck/icheck.css}" rel="stylesheet" type="text/css"/>
+		<!--分页插件样式-->
+		<link  th:href="@{/pagination/css/jqpagination.css}" rel="stylesheet" type="text/css"/>
+		<!--自定义css样式-->
+		<link  th:href="@{/css/reset/reset.css}" rel="stylesheet" type="text/css"/>
+		<link th:href="@{/css/reset/reset.css}" rel="stylesheet" type="text/css"/>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>统计管理<span class="c-gray en">&gt;</span>在线用户统计<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			<form id="stuForm" th:action="@{/user_feedback/listUserFeedback}">
+					<input type="hidden" id="pageNum" name="pageNum"  />
+			</form>
+			<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+				<span class="l">
+						<!--<a href="javascript:;" onclick="batchDel()" class="btn btn-danger radius">-->
+							<!--<i class="Hui-iconfont">&#xe6e2;</i> 批量删除-->
+						<!--</a> -->
+						<!--<a href="javascript:;" onclick="add()" class="btn btn-primary radius">-->
+							<!--<i class="Hui-iconfont">&#xe600;</i> 添加-->
+						<!--</a>-->
+				</span>
+				<span class="r">共有数据：<strong th:text="${pagehelper.total}"></strong> 条</span>
+			</div>
+			<div class="mt-20">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="25"><input type="checkbox" name="" value=""></th>
+						<th width="80">用户名</th>
+						<th width="80">用户邮箱</th>
+						<th width="80">登录时间</th>
+						<!--<th width="80">处理状态</th>-->
+						<!--<th width="50">操作</th>-->
+					</tr>
+				</thead>
+				<tbody>
+						<tr class="text-c" th:each="user:${userList}">
+							<td><input type="checkbox" th:value="${user.id}" name="hot_id"></td>
+							<td th:text="${user.username}" class="userId"></td>
+							<td th:text="${user.email}"></td>
+							<td th:text="${user.createTime}"></td>
+							<!--<td th:text="${userFeedBack.status == '1'}?'已处理':'未处理'" ></td>-->
+							<!--<td class="td-manage">-->
+									<!--&lt;!&ndash;<a title="编辑" href="javascript:;" th:onclick="'javascript:edit('+${userFeedBack.id}+')'" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>&ndash;&gt;-->
+									<!--<a title="删除" href="javascript:;" th:style="${session.current_role.getRoleDel() == 0}?'display:none':''" th:onclick="'javascript:deleteRank(this,'+${userFeedBack.id}+')'" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>-->
+							<!--</td>-->
+						</tr>
+				</tbody>
+			</table>
+				<div class="pagination" style="float:right;">
+					<a href="#" class="first" data-action="first">&laquo;</a>
+					<a href="#" class="previous" data-action="previous">&lsaquo;</a>
+					<input type="text" readonly="readonly" data-max-page="40" />
+					<a href="#" class="next" data-action="next">&rsaquo;</a>
+					<a href="#" class="last" data-action="last">&raquo;</a>
+				</div>
+			</div>
+		</div>
+	</body>
+	<!-- h-ui的js -->
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/h-ui/js/H-ui.js}"></script>
+	<script type="text/javascript" th:src="@{/h-ui.admin/js/H-ui.admin.js}"></script>
+	<!-- 弹出层js -->
+	<script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}"></script>
+	<script type="text/javascript" th:src="@{/lib/laypage/1.2/laypage.js}"></script>
+	<script type="text/javascript" th:src="@{/lib/My97DatePicker/4.8/WdatePicker.js}"></script>
+	<script type="text/javascript" th:src="@{/lib/datatables/1.10.0/jquery.dataTables.min.js}"></script>
+	<!--分页插件jquery pagination-->
+	<script type="text/javascript" th:src="@{/pagination/js/jquery.jqpagination.js}"></script>
+	<script type="text/javascript" th:src="@{/pagination/js/jquery.jqpagination.min.js}"></script>
+
+	<!--自定义js-->
+	<script type="text/javascript" th:src="@{/platform/js/log/log_list.js}"></script>
+	<script type="text/javascript">
+        $(".pagination").jqPagination({
+            current_page:[[${pagehelper.pageNum}]],
+            max_page:[[${pagehelper.pages}]],
+            page_string : '当前第{current_page}页,共{max_page}页',
+            paged: function(page) {
+                if([[${pagehelper.pageNum}]] != page){
+                    $("#pageNum").val(page);
+                    $("#stuForm").submit();
+                }
+            }
+        });
+	</script>
+</html>

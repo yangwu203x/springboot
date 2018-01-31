@@ -1,0 +1,93 @@
+﻿<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" th:src="@{/lib/html5shiv.js}"></script>
+<script type="text/javascript" th:src="@{/lib/respond.min.js}"></script>
+<![endif]-->
+<link th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" rel="stylesheet" type="text/css" />
+<link th:href="@{/h-ui/css/H-ui.min.css}" rel="stylesheet" type="text/css" />
+<link th:href="@{/h-ui.admin/css/H-ui.admin.css}" rel="stylesheet" type="text/css" />
+<!--[if IE 6]>
+<script type="text/javascript" th:src="@{/lib/DD_belatedPNG_0.0.8a-min.js}" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>确认页面</title>
+</head>
+<body>
+<form  name="InitInfoForm" >
+	<div class="row cl" >
+		<!--<label class="form-label col-xs-3"><i class="Hui-iconfont" style="font-weight:bold;">&#xe62d;</i></label>-->
+		<div class="formControls col-xs-8" >
+			<input id="USERPIN" name="USERPIN" type="hidden" class="input-text cn.enter" width="200px"  th:value = "${USERPIN}" required="required"/>
+		</div>
+	</div>
+	<div class="row cl" >
+		<!--<label class="form-label col-xs-3"><i class="Hui-iconfont" style="font-weight:bold;">&#xe62d;</i></label>-->
+		<div class="formControls col-xs-8" >
+			<input id="PID" name="PID" type="hidden" class="input-text cn.enter" width="200px"  th:value = "${PID}" required="required"/>
+		</div>
+	</div>
+	<div class="row cl" >
+		<!--<label class="form-label col-xs-3"><i class="Hui-iconfont" style="font-weight:bold;">&#xe62d;</i></label>-->
+		<div class="formControls col-xs-8" >
+			<input id="NUM" name="NUM" type="hidden"  class="input-text cn.enter" width="200px"  th:value = "${NUM}" required="required"/>
+		</div>
+	</div>
+	<div class="row cl" >
+		<!--<label class="form-label col-xs-3"><i class="Hui-iconfont" style="font-weight:bold;">&#xe62d;</i></label>-->
+		<div class="formControls col-xs-8" >
+			<input id="ePassDigest" name="ePassDigest" type="hidden"  class="input-text cn.enter" width="200px"   required="required"/>
+		</div>
+	</div>
+	<div class="row cl" style="margin-top: 50px;">
+		<div class="formControls col-xs-8 col-xs-offset-3">
+			<input name="" type="button" class="btn-success"  value="&nbsp;导&nbsp;出&nbsp;" style="font-size:16px;" onclick="expertToExcel()"/>
+		</div>
+	</div>
+</form>
+<script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}"></script>
+<script language="JavaScript">
+
+	$(function(){
+        var defaultData = $("#NUM").val();
+        var ePassPID = $("#PID").val();
+        var USERPIN = $("#USERPIN").val();
+        var ePass ;
+        try{
+            ePass = new ActiveXObject("ET99_FULL.ET99Full.1");
+            //打开锁
+            ePass.OpenToken(ePassPID,1);
+            //验证UserPIN
+            ePass.VerifyPIN(0,USERPIN);
+//            alert("VerifyPIN Success!");
+
+
+//            alert("defaultData = "+defaultData+", length = "+defaultData.length);
+            var ePassDigest = ePass.MD5HMAC(1,defaultData,defaultData.length);
+            $("#ePassDigest").attr("value",ePassDigest);
+//            alert("ePassDigest="+ePassDigest);
+            ePass.CloseToken();
+        }catch(error)
+        {
+            ePass.CloseToken();
+            alert("请插入正确的usb key！");
+            return false;
+        }
+	});
+
+    function expertToExcel(){
+
+        var ePassDigest = $("#ePassDigest").val();
+        alert("ePassDigest="+ePassDigest);
+        location.href="/song/exportToExcel?ePassDigest="+ePassDigest;
+        //var songFile=$('#songFile')[0].files[0];
+    }
+</script>
+</body>
+</html>
